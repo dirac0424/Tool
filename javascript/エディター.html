@@ -1,0 +1,402 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+<meta http-equiv="Content-Style-Type" content="text/css">
+<title></title>
+<style TYPE="text/css">
+<!--
+v\:* { behavior: url(#default#VML); }
+-->
+</style>
+<script src="YawdbaBrowser.js"></script>
+<script src="YawdbaWebParts.js"></script>
+<script src="YawdbaCanvas.js"></script>
+</head>
+<body id="body" onLoad="myInit();">
+<?xml:namespace prefix = v />
+<form action="" method="" id="myform" name="myform" />
+<input type="radio" name="drawMode" value="line" checked>線
+<input type="radio" name="drawMode" value="rect">矩形
+<input type="radio" name="drawMode" value="oval">楕円
+<hr>
+<table>
+<tr><td valign="top" style="width:30px" rowspan=4>線</td><td style="width:80px;">線色</td>
+<td>
+<input type="text" id="strokecolor" style="background-color:black;width:80px;" name="strokecolor" value="black"/>
+<input type="button" value="▼" style="width:25px;" 
+onclick="var color =  new YawdbaColorPallet(hYW, document.getElementById('strokecolor'), ''); color.show(event);"/>
+</td>
+</tr>
+<tr><td>透過率</td><td><select style="width:110px;" name="strokeopacity">
+	<option value="1">  0%</option>
+	<option value="0.9"> 10%</option>
+	<option value="0.8"> 20%</option>
+	<option value="0.7"> 30%</option>
+	<option value="0.6"> 40%</option>
+	<option value="0.5"> 50%</option>
+	<option value="0.4"> 60%</option>
+	<option value="0.3"> 70%</option>
+	<option value="0.2"> 80%</option>
+	<option value="0.1"> 90%</option>
+	<option value="0">100%</option>
+</select>
+</td></tr>
+<tr><td>線種</td><td><select style="width:110px;" name="strokeTYPE">
+	<option value="solid">実線</option>
+	<option value="shortdot">短点線</option>
+	<option value="dot">点線</option>
+	<option value="shortdash">短破線</option>
+	<option value="dash">破線</option>
+	<option value="longdash">長破線</option>
+	<option value="shortdashdot">短一点鎖線</option>
+	<option value="shortdashdotdot">短ニ点鎖線</option>
+	<option value="dashdot">一点鎖線</option>
+	<option value="longdashdot">長一点鎖線</option>
+	<option value="longdashdotdot">長ニ点鎖線</option>
+</select>
+</td></tr>
+<tr><td>線幅</td><td><select style="width:110px;" name="strokeWIDTH">
+	<option value="1">1</option>
+	<option value="2" selected>2 </option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+</select>
+</td></tr>
+</table>
+<hr>
+<table>
+<tr><td valign="top" style="width:30px;" rowspan=5>塗りつぶし</td><td style="width:80px;">効果</td><td>
+<select style="width:110px;" name="filleffect" onchange="
+	if(this.value != 'uniformity') 	{
+		document.myform.fillcolor2.style.visibility='visible';
+		document.myform.fc2Button.style.visibility = 'visible'; 
+		document.getElementById('cap1').style.color = 'black';
+	}
+	else	{
+		document.myform.fillcolor2.style.visibility='hidden';
+		document.myform.fc2Button.style.visibility = 'hidden'; 
+		document.getElementById('cap1').style.color = 'white';
+	}">
+	<option value="uniformity">均一</option>
+	<option value="hgradation">横グラデーション</option>
+	<option value="vgradation">縦グラデーション</option>
+</select>
+</td></tr>
+<tr><td>立体化&影</td><td><select style="width:110px;" name="extshadow" >
+	<option value="none">しない</option>
+	<option value="s2">影 2pt</option>
+	<option value="s4">影 4pt</option>
+	<option value="s6">影 6pt</option>
+</select>
+</td></tr>
+<tr><td>透過率</td><td><select style="width:110px;" name="fillopacity">
+	<option value="1">  0%</option>
+	<option value="0.9"> 10%</option>
+	<option value="0.8"> 20%</option>
+	<option value="0.7"> 30%</option>
+	<option value="0.6"> 40%</option>
+	<option value="0.5"> 50%</option>
+	<option value="0.4"> 60%</option>
+	<option value="0.3"> 70%</option>
+	<option value="0.2"> 80%</option>
+	<option value="0.1"> 90%</option>
+	<option value="0">100%</option>
+</select>
+</td></tr>
+<tr><td>色</td><td>
+<input type="text" id="fillcolor" style="width:80px;font:black;background-color:white;" name="fillcolor" value="none"></input>
+<input type=button id="fcButton" value="▼" style="width:25px;" onclick="var color =  new YawdbaColorPallet(hYW, document.getElementById('fillcolor'), 'hasTransparent'); color.show(event);"/></td>
+</tr>
+<tr><td id="cap1" style="color:white">二次色</td><td>
+<input type="text" id="fillcolor2" style="width:80px;visibility:hidden;" name="fillcolor2" value="none" />
+<input type=button id="fc2Button" value="▼" style="width:25px;visibility:hidden;" onclick="var color =  new YawdbaColorPallet(hYW, document.getElementById('fillcolor2'), 'hasTransparent'); color.show(event);"/></td>
+</tr>
+</table>
+<HR>
+<BR>
+<table>
+<tr><td>
+<input type="button" value="ソース" onclick="writeSource(draw.firstChild, document.myform.source)" />
+<input type="button" value="クリア" onclick="document.myform.source.value = '';" />
+</td></tr>
+<tr><td>
+<textarea rows="20" style="width:220px;" name="source"></textarea>
+</td></tr>
+</table>
+</form>
+<div id="draw"></div>
+</body>
+</html>
+<script type="text/javascript"> 
+<!--
+/* 設定情報取得 */
+function fillcolor()	{
+	/* fillしない場合には、"none"を返却する */
+	return document.myform.fillcolor.value;
+}
+
+function fillcolor2()	{
+	return document.myform.fillcolor2.value;
+}
+function fillopacity()	{
+	return document.myform.fillopacity.value;
+}
+
+function strokecolor()	{
+	return document.myform.strokecolor.value;
+}
+
+function strokeopacity()	{
+	return document.myform.strokeopacity.value;
+}
+
+function stroketype()	{
+	return document.myform.strokeTYPE.value;
+}
+
+function strokewidth()	{
+	return document.myform.strokeWIDTH.value;
+}
+
+function filleffect()	{
+	return document.myform.filleffect.value;
+}
+
+function get_extshadow()	{
+	return document.myform.extshadow.value;
+}
+
+
+function getMode()	{
+	target = document.getElementById('myform');
+	for(i=0; i<target.drawMode.length; i++)	{
+		if(target.drawMode[i].checked)	{
+			return target.drawMode[i].value;
+		}
+	}
+	return "";
+}
+
+/* DOM操作関数　*/
+function clear_canvas(node)	{
+	if(node.firstChild != null)	{
+		for(i=node.childNodes.length-1; 0<=i; i--)	{
+			node.removeChild(node.childNodes[i]);
+		}
+	}
+}
+
+var temp_attr;
+var cur_x;
+var cur_y;
+var begin_x;
+var begin_y;
+var on_select;
+var objno;
+var hYW;
+var root;
+var drag;
+var canvas;
+
+temp_attr = null;
+cur_x = 0;
+cur_y = 0;
+begin_x = 0;
+begin_y = 0;
+on_select = 0;
+objno = 1;
+drag  = null;
+hYW = new YawdbaBrowser();
+root = document.getElementById('draw');
+canvas = YawdbaCanvas(hYW, root, 250,0,1000,1000);
+
+function myInit()	{
+	document.myform.fillcolor.value = 'none';
+	document.myform.fillcolor.style.backgroundColor = 'white';
+	document.myform.fillcolor.style.color = 'black';
+	document.myform.fillcolor2.style.visibility='hidden';
+	document.myform.fc2Button.style.visibility = 'hidden'; 
+	document.getElementById('cap1').style.color = 'white';
+}
+
+
+canvas.root.onmousemove = function(e)	{
+	cur_x = canvas.getcursor(e).x;
+	cur_y = canvas.getcursor(e).y;	
+	if(on_select == 1)	return;
+	if(drag != null) {
+		if(hYW.getMouseButton(e) != 'L')	{
+			begin_x = 0;
+			begin_y = 0;
+			quitDrag(canvas);
+			drag = null;
+			return;
+		}
+		showDrag(canvas,begin_x, begin_y, cur_x, cur_y);
+	}
+}
+canvas.root.onmousedown = function(e)	{
+	if(on_select == 1)	return;
+	if(hYW.getMouseButton(e) == 'L')	{
+		begin_x = cur_x;
+		begin_y = cur_y;
+		drag = newDrag(canvas, begin_x, begin_y, begin_x, begin_y);
+	}
+}
+canvas.root.onmouseup = function(e)	{
+	if(on_select == 1)	return;
+	if(drag != null)	{
+		if(2 < Math.abs(cur_x - begin_x) || 2 < Math.abs(cur_y - begin_y))	{
+			putObject(canvas);
+		}
+		drag = null;
+	}
+}
+
+function newDrag(canvas,begin_x, begin_y, cur_x, cur_y)	{
+	var obj;
+	mode = getMode();
+
+	if(drag != null)
+		canvas.removeObj(drag);
+	if(mode == 'line')	{
+		obj = canvas.creatLine('drag',begin_x, begin_y, cur_x, cur_y);
+	}
+	else if(mode == 'rect')	{
+		obj = canvas.creatRect('drag',begin_x, begin_y, cur_x, cur_y);
+	}
+	else if(mode == 'oval')	{
+		obj = canvas.creatOval('drag',begin_x, begin_y, cur_x, cur_y);
+	}
+	canvas.setStrokeAttr(obj,'solid','none',0,1.0);
+	canvas.setFillAttr(obj,'solid','none',null,null,1);
+	return obj;
+}
+
+function showDrag(canvas,begin_x, begin_y, cur_x, cur_y)	{
+	if(getMode() == 'line')	{
+		canvas.setLine(drag, begin_x, begin_y, cur_x, cur_y);
+		canvas.setStrokeAttr(drag,'solid','black',1,1.0);
+	}
+	else if(getMode() == 'rect')	{
+		canvas.setRect(drag,begin_x, begin_y, cur_x, cur_y);
+		canvas.setStrokeAttr(drag,'solid','black',1,1.0);	
+	}
+	else if(getMode() == 'oval')	{
+		canvas.setOval(drag, begin_x, begin_y, cur_x, cur_y);
+		canvas.setStrokeAttr(drag,'solid','black',1,1.0);
+	}
+}
+function quitDrag(canvas)	{
+	canvas.removeObj(drag);
+}
+
+function putObject(canvas)	{
+	var obj = drag;
+	if(drag == null)
+		return;
+	drag.id = "obj" + objno;
+	objno++;
+	canvas.setStrokeAttr(obj,
+			stroketype(),
+			strokecolor(),
+			strokewidth(),
+			strokeopacity()
+		);
+	canvas.setFillAttr(obj,
+			filleffect(),
+			fillcolor(),
+			fillcolor2(),
+			get_extshadow(),
+			fillopacity()
+		);
+	obj.oncontextmenu = function(e)	{
+			return false;
+		}
+	obj.onmousedown = function(e)	{
+		var select_obj = hYW.getEventObject(e);
+		if(hYW.getMouseButton(e) == 'R')	{
+			if(on_select == 0)	{
+				temp_attr = canvas.changeAttr(obj,'black',1,'gray');
+				on_select = 1;
+				yMenu = new YawdbaMenu(hYW, "ObjectMenu", 
+					"----操作----",
+					"   削　除   |delete,描画属性変更|update",120,-1);
+				yMenu.show(e);
+				yMenu.menu.onclick = function(e)	{
+					var menu = yMenu.menu;
+					var op = new String(menu.value);
+					yMenu.quit();
+					if(op == 'delete')	{
+						canvas.pane.removeChild(obj);
+					}
+					else if(op == 'update')	{
+						canvas.setStrokeAttr(obj,
+							stroketype(),
+							strokecolor(),
+							strokewidth(),
+							strokeopacity()
+						);
+						canvas.setFillAttr(obj,
+							filleffect(),
+							fillcolor(),
+							fillcolor2(),
+							get_extshadow(),
+							fillopacity()
+						);
+					}
+					else	{
+						canvas.restoreAttr(obj, temp_attr);
+					}
+					on_select = 0;
+				}
+			}
+		}
+		else if(hYW.getMouseButton(e) == 'L')	{
+			if(on_select == 0)	{
+				temp_attr = canvas.changeAttr(obj,'black','1','gray');
+			 	on_select = 1; 
+				cur_x = canvas.getcursor(e).x;
+				cur_y = canvas.getcursor(e).y;
+				obj.style.cursor = 'move';
+			}
+		}
+	}
+	obj.onmouseover = function(e)	{
+		obj.style.cursor = 'hand';
+	}
+	obj.onmousemove = function(e)	{
+		if(on_select == 1)	{
+			var new_x = canvas.getcursor(e).x;
+			var new_y = canvas.getcursor(e).y;
+			canvas.transfObj(obj, new_x - cur_x,new_y - cur_y);
+			cur_x = new_x;
+			cur_y = new_y;
+			obj.style.cursor = 'move';
+		}
+	}
+	obj.onmouseup = function(e)	{
+		if(on_select == 1)	{
+			canvas.restoreAttr(obj,temp_attr);
+			on_select = 0;
+			obj.style.cursor = 'default';
+		}
+	}
+	obj.onmouseout = function()	{
+		if(on_select == 1)	{	
+			canvas.restoreAttr(obj,temp_attr);
+			on_select = 0; 
+			obj.style.cursor = 'default';
+		}
+	}
+}
+
+function writeSource(obj, text)	{
+	if(obj.innerHTML != null)
+		text.value += obj.innerHTML;
+}
+
+//-->
+</script>
