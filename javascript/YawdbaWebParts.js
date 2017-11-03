@@ -19,7 +19,7 @@ function YawdbaDialog(hYW, id, t, w, h)	{
 		}
 		hYW.setOpacity(mdiv,0.2);
 	}
-	/* ダイアログ画面のdiv */
+	/* dialogのdiv */
 	dialog.id = id;
 	if(w > 0)	dialog.style.width  = w + 'px';
 	if(h > 0)	dialog.style.height = (h + title_height) + 'px';
